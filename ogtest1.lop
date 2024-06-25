@@ -1,0 +1,10 @@
+{
+  ar := <10 20 30 40 50>
+  i := 1
+  {
+    display ar_i
+    i := i + 1
+    if i > #ar then stop
+  }
+  stop
+}

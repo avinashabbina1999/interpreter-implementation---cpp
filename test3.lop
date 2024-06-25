@@ -1,0 +1,8 @@
+{
+  i:= 1
+  ar := <1 3 5 >
+  display ar_i
+  display "\n"
+  display ar_3
+  stop
+}

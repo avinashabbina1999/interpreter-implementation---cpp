@@ -1,0 +1,28 @@
+{
+point: [
+|x y|
+constructor(x, y) {
+my:x := x
+my:y := y
+stop
+}
+function midpoint(p) {
+mx := (x + p:x)/2
+my := (y + p:y)/2
+new point(mx, my)
+stop
+}
+]
+input "x1="; x1
+input "y1="; y1
+input "x2="; x2
+input "y2="; y2
+p1 := new point(x1, y1)
+p2 := new point(x2, y2)
+mp := p1:midpoint(p2)
+display "Midpoint: "
+display p1:x
+display ", "
+display p2:y
+display "\n"
+}

@@ -1,0 +1,16 @@
+{
+  point: [
+    |x y|
+    constructor(x1, y1) {
+      x := x1
+      y := y1
+      stop
+    }
+    function midpoint(p) {
+      display "hello\n"
+      stop
+    }
+  ]
+  display "check done\n"
+  stop
+}

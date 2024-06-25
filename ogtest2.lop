@@ -1,0 +1,5 @@
+i:=1
+if i<=10 then {
+  display i
+  i:=i+1
+}

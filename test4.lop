@@ -1,0 +1,13 @@
+{
+  function fun(a,b){
+    display "hello "
+    display a+b
+    display "\n"
+    stop
+  }
+  prompt "a=" a
+  display a
+  display "\n"
+  fun(a,2)
+  stop
+}

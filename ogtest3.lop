@@ -1,0 +1,20 @@
+{
+  function solve(n, src, dest, spare) {
+    if n = 1 then {
+      display src
+      display "->"
+      display dest
+      display "\n"
+      stop
+    }
+    if n > 1 then {
+      solve(n-1, src, spare, dest)
+      solve(1, src, dest, spare)
+      solve(n-1, spare, dest, src)
+      stop
+    }
+    stop
+  }
+  prompt "How many discs? " n
+  solve(n, "A", "C", "B")
+}

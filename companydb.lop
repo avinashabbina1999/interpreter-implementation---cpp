@@ -1,0 +1,192 @@
+{
+  purchase: [
+    |aitem aqty acost|
+    constructor(item,qty,cost){
+      my:aitem := item
+      my:aqty := qty
+      my:acost := cost
+      stop
+    }
+  ]
+  employee: [
+    |aname aemail aphone asalary|
+    constructor(name,email,phone,salary){
+      my:aname := name
+      my:aemail := email
+      my:aphone := phone
+      my:asalary := salary
+      stop
+    }
+  ]
+  customer: [
+    |aname aemail aphone ahistory ahistorycount|
+    constructor(name,email,phone,history,historycount){
+      my:aname:= name
+      my:aemail := email
+      my:aphone := phone
+      my:ahistory := history
+      my:ahistorycount := historycount
+      stop
+    }
+    function history(ind){
+      ahistory_ind
+      stop
+    }
+  ]
+  company: [
+    | aname |
+    constructor(name){
+      my:aname := name
+      stop
+    }
+    function addcus(){
+      prompt "Name: " name1
+      prompt "Email: " email1
+      prompt "Phone: " phone1
+      history1 := < 1 2 3 4 5 >
+      new customer(name1,email1,phone1,history1,0)
+      stop
+    }
+  ]
+  prompt "Company Name: " cname
+  name1 := "hello"
+  name2 := "bye"
+  comp := new company(cname)
+  emps := < 1 2 3 4 5 >
+  empcount := 0
+  cuss := < 1 2 3 4 5 >
+  cuscount := 0
+  {
+    prompt "   MAIN MENU\n1.)Employees\n2.)Sales\n3.)Quit\n\nChoice? " choice
+    if choice = 3 then stop
+    if choice = 1 then {
+        if empcount > 0 then {
+          count := 1
+          {
+            display name1
+            display "\n"
+            display name2
+            display "\n"
+            emp := emps_count
+            display emp:aname
+            display "<"
+            display emp:aemail
+            display "> Phone: "
+            display emp:aphone
+            display " Salary: $"
+            display emp:salary
+            count := count + 1
+            if count > empcount then stop
+          }
+          stop
+        }
+        prompt "(A)dd Employee or (M)ain Menu " empchoice
+        if empchoice = "M" then stop
+        if empchoice = "A" then {
+          emp1 := new employee("name","email","phone","salary")
+          prompt "Name: " name
+          prompt "Email: " email
+          prompt "Phone: " phone
+          prompt "Salary: " salary
+          emp1:aname := name
+          emp1:aemail := email
+          emp1:aphone := phone
+          emp1:asalary := salary
+          if empcount = 0 then{
+            name1 := emp1:aname
+            stop
+          }
+          if empcount = 1 then{
+            name2 := emp1:aname
+            stop
+          }
+          empcount := empcount + 1
+          emps_empcount := emp1
+          stop
+        }
+    }
+    if choice = 2 then {
+      prompt "(A)dd Customr, Enter a (S)ale, (V)iew Customer, or (M)ain Menu? " cuschoice
+      if cuschoice = "M" then stop
+      if cuschoice = "A" then {
+        cus1 := comp:addcus()
+        cuscount := cuscount + 1
+        cuss_cuscount := cus1
+        stop
+      }
+      if cuschoice = "S" then {
+        if cuscount = 0 then display "Error!!No Customers\n"
+        if cuscount > 0 then {
+          count := 1
+          {
+            cus := cuss_count
+            display count
+            display "."
+            display cus:aname
+            display "\n"
+            count := count + 1
+            if count > cuscount then stop
+          }
+          prompt "Choice? " purchoice
+          cus := cuss_purchoice
+          history := cus:ahistory
+          historycount := cus:ahistorycount
+          historycount := historycount + 1
+          prompt "Item: " item
+          prompt "Quantity: " qty
+          prompt "Cost: " cost
+          pur := new purchase(item,qty,cost)
+          history_historycount := pur
+          cus:ahistory := history
+          cus:ahistorycount := historycount
+          cuss_purchoice := cus
+          stop
+        }
+        stop
+      }
+      if cuschoice = "V" then {
+        if cuscount = 0 then display "Error!!No Customers\n"
+        if cuscount > 0 then {
+          count := 1
+          {
+            cus := cuss_count
+            display count
+            display "."
+            display cus:aname
+            display "\n"
+            count := count + 1
+            if count > cuscount then stop
+          }
+          prompt "Choice? " purchoice
+          cus := cuss_purchoice
+          history := cus:ahistory
+          historycount := cus:ahistorycount
+          display cus:aname
+          display "<"
+          display cus:aemail
+          display "> Phone: "
+          display cus:aphone
+          display "\n\nOrder History\nItem Price Quantity Total\n"
+          if historycount > 0 then {
+            count := 1
+            {
+              his := history_count
+              display his:item
+              display " "
+              display his:cost
+              display " "
+              display his:qty
+              display "\n"
+              count := count + 1
+              if count > historycount then stop
+            }
+            stop
+          }
+          stop
+        }
+        stop
+      }     
+    }
+  }
+  stop
+}

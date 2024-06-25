@@ -1,0 +1,376 @@
+Original Grammar
+======================================================================================================
+
+< Program >              ::= "{" < Expressions > "}"
+
+< Expressions >          ::= < Program >
+                             | < Expressions > < Expression >
+                             | ""
+
+< Expression >           ::= < L-Value > ":=" < Variable >
+                             | < L-Value > < Expression' >
+                             | "if" < Check > then < Program >
+                             | "if" < Check > then < Expression >
+                             | "read" < Ref >
+                             | "prompt" < String > < Ref >
+                             | "input"  < String > < Ref >
+                             | "display" < String >
+                             | "display" < Super_sum >
+                             | "function" < Ref > "(" < Param > ")"
+                             | "function" < Ref > "()"
+                             | < L-Value > ": [ |" < Instances > "|" < Constructor > < Methods > "]"
+                             | "new" < Ref > "(" < Args > ")"
+                             | < L-Value > ":= new" < Ref > "(" < Args > ")"
+                             | < Ref > ":" < Ref > < Expression' >
+                             | < L-Value > ":=" < Ref > ":" < Ref > < Expression' >
+                             | "my:" < Ref > ":=" < Variable >
+                             | "stop"
+
+< Instances >            ::= < Instances > < Ref >
+                             | ""
+
+< Constructor >          ::= "constructor(" < Param > "){" < Constructor_Body > "}"
+
+< Constructor_Body >     ::= < Constructor_Body > < Expression >
+                             | < Expression >
+
+< Methods >              ::= < Methods > < <Method >
+                             | < Method >
+
+< Method >               ::= "function" < Ref > "(" < Param > ")"
+                             | "function" < Ref > "()"
+
+< Param >                ::= < Param > "," < Ref >
+                             | < Ref >
+
+< Expression' >          ::= "(" < Args > ")"
+                              | "()"
+                              | < Sum' >
+                              | < Term' >
+                              | < Factor' >
+                              | ":=" < Sum >
+
+< Args >                 ::= < Args > "," < Variable >
+                             | < Variable >
+
+< Check >                ::= < Variable >              
+                             | < Super_sum > "=" < Super_sum >
+                             | < Super_sum > "<>" < Super_sum >
+                             | < Super_sum > ">" < Super_sum >
+                             | < Super_sum > "<" < Super_sum >
+                             | < Super_sum > "<=" < Super_sum >
+                             | < Super_sum > ">=" < Super_sum >
+
+< Variable >             ::= < Super_sum >
+                             | < Array >
+
+< Array >                ::= "<" < Array_List > ">"
+
+< Array_List >           ::= < Array_List > < Super_sum >
+                             | ""
+
+< Super_sum >            ::= < Sum >
+                             | < Ref > < Expression' >
+                             | < String >
+
+< Sum >                  ::= < Sum > "+" < Term >
+                             | < Sum > "-" < Term >
+                             | < Term >
+
+< Term >                 ::= < Term > "*" < Factor >
+                             | < Term > "/" < Factor >
+                             | < Factor >
+
+< Factor >               ::= < Factor > "^" < Exponent >
+                             | < Factor > "^" < Factor >
+                             | < Exponent >
+
+< Exponent >             ::= < Number >
+                             | < Ref >
+                             | "(" < Expression > ")"
+
+< L-Value >              ::=  < Ref >
+
+< Ref >                  ::= < Id > 
+
+< Id >                   ::= < Ref > < Letter > 
+                             | < Ref > < Digit >
+
+
+< Number >               ::= < Number > < Digit >
+                             | < Number > "." < Number >
+                             | < Digit >
+
+< String >               ::= "\"" < Sentence > "\""
+
+< Sentence >             ::= < Sentence > < Letter > < Sentence >
+                             | < Sentence > < Digit > < Sentence >
+                             | < Sentence > < Specials > < Sentence >
+                             | ""
+
+< Digit >                ::= "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"
+
+<Specials>               ::=  "`"|"~"|"!"|"@"|"#"|"$"|"%"|"^"|"&"|"*"|"("|")"|"_"|" "
+
+
+LL(1) Grammar
+======================================================================================================
+This is the grammar after tranforming the relevant parts into LL(1).
+
+< Program >              ::= "{" < Expressions > "}"
+
+< Expressions >          ::= "{" < Expressions > "}"
+                              | < Expression > < Expressions >
+                              | ""
+
+< Expression >           ::= < Ref > ":=" < Variable >
+                             | < Ref > < Expression' >
+                             | < If >
+                             | < IO >
+                             | < Function >
+                             | < Class_Def >
+                             | "new" < Ref > "(" < Args > ")"
+                             | < Ref > ":= new" < Ref > "(" < Args > ")"
+                             | < Ref > ":" < Ref > < Expression' >
+                             | < Ref > ":=" < Ref > ":" < Ref > < Expression' >
+                             | "stop"
+
+< Class_Def >            ::= < Ref > ": [ |" < Instances > "|" < Constructor > < Methods > "]"
+
+< Instances >            ::= < Ref > < Instances >
+                             | ""
+
+< Constructor >          ::= "constructor(" < Param > "){" < Constructor_Body > "}"
+
+< Constructor_Body >     ::= < Expression > < Constructor_Body >
+                             | "my:" < Ref > ":=" < Variable > < Constructor_Body >
+
+< Methods >              ::= < Function > < Methods >
+                             | ""
+
+< Function >             ::= "function" < Ref > "(" < Param > ")"
+                             | "function" < Ref > "()"
+
+< Param >                ::= < Ref > "," < Param >
+                             | < Ref >
+
+< Expression' >          ::= "(" < Args > ")"
+                              | "()"
+                              | < Sum' >
+                              | < Term' >
+                              | < Factor' >
+                              | ":=" < Sum >
+
+< Args >                 ::= < Variable > "," < Args >
+                             | < Variable >
+
+< If >                   ::= "if" < Check > "then" < Expression >
+                             | "if" < Check > "then" < Program > 
+
+< IO >                   ::= "input" < String > < Ref >
+                             | "prompt" < String > < Ref >
+                             | "read" < Ref >
+                             | "display" < Super_sum >
+
+< Check >                ::= < Variable >              
+                             | < Super_sum > < Cond > < Super_sum >
+
+< Variable >             ::= < Super_sum >
+                             | < Array >
+
+< Array >                ::= "<" < Array_List > ">"
+
+< Array_List >           ::= < Super_sum > < Array_List >
+                             | ""
+
+< Super_sum >            ::= < Sum >
+                             | < Ref > < Expression' >
+                             | < String >
+
+< Sum >                  ::= < Term > < Sum' >
+
+< Sum' >                 ::= "+" < Term > < Sum' >
+                             | "-" < Term > < Sum' >
+                             | ""
+
+< Term >                 ::= < Factor > < Term' > 
+
+< Term' >                ::= "*" < Factor > < Term' >
+                             | "/" < Factor > < Term' >
+                             | ""
+
+< Factor >               ::= < Exponent > < Factor' >
+
+< Factor' >              ::= "^" < Exponent >
+                             | "^" < Factor' >
+                             | "^" < Factor >
+                             | ""
+
+< Exponent >             ::= < Number > 
+                             | < Ref > 
+                             | "#" < Ref >
+                             | "(" < Expression > ")"
+
+< Number >               ::= < Digit > < Number >
+                             | < Number > "." < Number >
+                             | < Digit >
+
+
+< Ref >                  ::= < Id >
+
+< Id >                   ::= < Ref > < Letter > 
+                             | < Ref > < Digit >
+
+< String >               ::= "\"" < Sentence > "\""
+
+< Sentence >             ::= < Sentence > < Letter > < Sentence >
+                             | < Sentence > < Digit > < Sentence >
+                             | < Sentence > < Specials > < Sentence >
+                             | ""
+
+< Digit >                ::= "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"
+
+<Specials>               ::=  "`"|"~"|"!"|"@"|"#"|"$"|"%"|"^"|"&"|"*"|"("|")"|"_"|" "
+
+< Cond >                 ::=  "<"|">"|"="|"<>"|"<="|">="
+
+Parser Grammar
+======================================================================================================
+This is the grammar with the tokens removed and placed in a lexer grammar.
+
+< Program >              ::= OPEN_CURL < Expressions > CLOSE_CURL
+
+< Expressions >          ::= OPEN_CURL < Expressions > CLOSE_CURL
+                             | < Expression > < Expressions >
+                             | ""
+
+< Expression >           ::= < Ref > ASSIGN < Variable >
+                             | < Ref > < Expression' >
+                             | < If >
+                             | < IO >
+                             | < Function >
+                             | < Class_Def >
+                             | NEW < Ref > OPEN_PAR < Args > CLOSE_PAR 
+                             | < Ref > ASSIGN NEW < Ref > OPEN_PAR < Args > CLOSE_PAR 
+                             | < Ref > COLON < Ref > < Expression' >
+                             | < Ref > ASSIGN < Ref > COLON < Ref > < Expression' >
+                             | STOP
+
+< Class_Def >            ::= < Ref > COLON OPEN_SQ PIPE < Instances > PIPE < Constructor > < Methods > CLOSE_SQ
+
+< Instances >            ::= < Ref > < Instances >
+                             | ""
+
+< Constructor >          ::= CONSTRUCTOR OPEN_PAR < Param > CLOSE_PAR OPEN_CURL < Constructor_Body > CLOSE_CURL
+
+< Constructor_Body >     ::= < Expression > < Constructor_Body >
+                             | MY COLON < Ref > ASSIGN < Variable > < Constructor_Body >
+
+< Methods >              ::= < Function > < Methods >
+                             | ""
+
+< Function >             ::= FUNCTION < Ref > OPEN_PAR < Param > CLOSE_PAR
+                             | FUNCTION < Ref > OPEN_PAR CLOSE_PAR
+
+< Param >                ::= < Ref > COMMA < Param >
+                             | < Ref >
+
+< Expression' >          ::= OPEN_PAR < Args > CLOSE_PAR
+                             | OPEN_PAR CLOSE_PAR
+                             | < Sum' >
+                             | < Term' >
+                             | < Factor' >
+                             | ACCESS < Sum >
+
+< Args >                 ::= < Variable > COMMA < Args >
+                             | < Variable >
+
+< If >                   ::= IF < Check > THEN < Expression >
+                             | IF < Check > THEN < Program > 
+
+< IO >                   ::= INPUT STRING < Ref >
+                             | PROMPT STRING < Ref >
+                             | READ < Ref >
+                             | DISPLAY < Super_sum >
+
+< Check >                ::= < Variable >              
+                             | < Super_sum > COND < Super_sum >
+
+< Variable >             ::= < Super_sum >
+                             | < Array >
+
+< Array >                ::= LANG < Array_List > RANG
+
+< Array_List >           ::= < Super_sum > < Array_List >
+                             | ""
+
+< Super_sum >            ::= < Sum >
+                             | < Ref > < Expression' >
+                             | STRING
+
+< Sum >                  ::= < Term > < Sum' >
+
+< Sum' >                 ::= ADD < Term > < Sum' >
+                             | SUB < Term > < Sum' >
+                             | ""
+
+< Term >                 ::= < Factor > < Term' > 
+
+< Term' >                ::= MUL < Factor > < Term' >
+                             | DIV < Factor > < Term' >
+                             | ""
+
+< Factor >               ::= < Exponent > < Factor' >
+
+< Factor' >              ::= POW < Exponent >
+                             | POW < Factor' >
+                             | ""
+
+< Exponent >             ::= INT 
+                             | REAL
+                             | < Ref > 
+                             | HASH < Ref >
+                             | OPEN_PAR < Expression > CLOSE_PAR
+
+< Ref >                  ::= ID
+
+
+Lexer Grammar
+======================================================================================================
+This is the set of regular expressions defining the tokens.
+
+ADD               \+
+SUB               -
+MUL               *
+DIV               /
+POW               ^
+OPEN_PAR          \(
+CLOSE_PAR         \)
+INT               [0-9]+
+REAL              [0-9]+\.[0-9]+
+ID                [a-zA-Z_][a-zA-Z_0-9]*
+ASSIGN            :=
+OPEN_CURL         {
+CLOSE_CURL        }
+HASH              #
+NEW               new
+COLON             :
+STOP              stop
+OPEN_SQ           [
+CLOSE_SQ          ]
+LANG              <
+RANG              >
+CONSTRUCTOR       constructor
+PIPE              \|
+MY                my
+FUNCTION          function
+COMMA             ,
+IF                if
+THEN              then
+INPUT             input
+READ              read
+PROMPT            prompt
+STRING            \"[^\"]*\"
+DISPLAY           display
+ACCESS            _
+COND              = | <> | < | > | <= | >=

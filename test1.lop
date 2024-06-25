@@ -1,0 +1,8 @@
+{
+  read a
+  prompt "b=" b
+  display a
+  display "hello"
+  display b
+  stop
+}

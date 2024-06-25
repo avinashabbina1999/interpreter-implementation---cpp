@@ -1,0 +1,28 @@
+{
+  point: [
+    |x y|
+    constructor(x, y) {
+      display "hello\n"
+      my:x := x
+      my:y := y
+      stop
+    }
+    function midpoint(p) {
+      display "hello\n"
+      stop
+    }
+    function hello(){
+    
+    }
+  ]
+  function midpoint(a,b) {
+    ma := (a + 1)/2
+    mb := (b + 1)/2
+    new point(ma,mb)
+    stop
+  }
+  temp := midpoint(1,2)
+  display temp:y
+  display "bye\n"
+  stop
+}
