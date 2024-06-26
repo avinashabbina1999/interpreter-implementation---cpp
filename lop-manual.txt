@@ -1,0 +1,270 @@
+======================================================================
+                 LOP - Loop Oriented Programming
+======================================================================
+
+   Table of Contents
+   =================
+1. Introduction
+2. Expressions and Operators
+3. Branches & Loop Control
+4. Input & Output
+5. Data Types
+6. Functions
+7. Objects & Classes
+
+1. Introduction & Loops
+===================================
+LOP is a loop oriented programming language. Every program is 
+inherently an infinite loop of the following form:
+
+{
+  statements
+}
+
+A statement can be one of the following
+
+The language is dynamically bound and dynamically typed. It also
+contains simple objects, but no mechanism for inheritence and 
+polymorphism. 
+
+The primary metaphor of this language is that everything is a loop, 
+the program body and all function bodies are loops. They will 
+continuosly run until told otherwise!
+
+2. Expressions and Operators
+===================================
+An expression consists of one more literals and operators 
+strung together. The operators and precedence for this language are
+shown in the following chart:
+
++-------+----------+-----------------------+---------------+
+| Level | Operator | Description           | Associativity |
++-------+----------+-----------------------+---------------+
+| 1     | :        | Member Access         | Left          |
+|       | _        | Subscript             |               |
++-------+----------+-----------------------+---------------+
+| 2     | a(..)    | Function Call         | Left          |
++-------+----------+-----------------------+---------------+
+| 3     | -a       | Unary Negation        | Right         |
+|       | +a       | Unary Positive (abs)  |               |
+|       | #a       | Number of elements    |               |
++-------+----------+-----------------------+---------------+
+| 4     | ^        | Exponent              | Left          |
++-------+----------+-----------------------+---------------+
+| 5     | *        | Multiplication        | Left          |
+|       | /        | Division              |               |
+|       | %        | Modulus               |               |
++-------+----------+-----------------------+---------------+
+| 6     | +        | Addition              | Left          |
+|       | -        | Subtraction           |               |
++-------+----------+-----------------------+---------------+
+| 7     | <        | Less Than             | Left          |
+|       | <=       | Less Than or Equal    |               |
+|       | >        | Greater Than          |               |
+|       | >=       | Greater Than or Equal |               |
++-------+----------+-----------------------+---------------+
+| 8     | =        | Equals                | Left          |
+|       | <>       | Not Equals            |               |
++-------+----------+-----------------------+---------------+
+| 9     | :=       | Assignment            | Right         |
++-------+----------+-----------------------+---------------+
+
+Example literals for each of the fundamental types are shown below:
+  <1 2 3> - Array
+  x       - Variable
+  12      - Integer
+  12.0    - Real Number
+  "hello" - String
+
+Arrays
+------
+Syntactically, an array is a set of expressions enclosed in angle 
+brackets. The expressions are evaluated, and their values are
+stored in the array. Arrays are of fixed sizes, and cannot be
+resized. They are indexed using the "_" operator. The left hand
+side is an array and the right hand side is an index. Arrays are 
+indexed beginning at 1. For example, to loop over an array of
+5 items:
+
+{
+  ar := <10 20 30 40 50>
+  i  := 1
+  {
+     display ar_i
+     i := i + 1
+     if i > #ar then stop
+  }
+  stop
+}
+
+Identifiers
+-----------
+Identifiers follow these rules:
+1. Begin with a letter.
+2. Can contain letters or numbers after the first letter.
+
+References
+----------
+Assignable references are one of the following:
+1. Id
+2. Reference_Expression 
+3. object:member
+
+3. Branches & Loop Control
+===================================
+Loops essentially run forever, unless they are stopped via the 
+"stop" keyword. This is typically done as part of a branch. 
+Branches have the following basic form:
+
+   if condition then statement
+
+All variable types have a "truthiness" associated with them.
+This follows this pattern:
+
+  True - Numbers with a non-zero integer part
+         Non-Empty Strings
+         Non-Empty Arrays
+         Any object
+
+  False - Number's with an integer part of zero
+          Empty Strings
+          Arrays with zero elements
+
+For example, following are all true:
+   1, 1.5, "hello", < 1 >
+
+The following are all false:
+   0, 0.5, "", <>
+
+It should be noted that while you can put a loop as a statement, 
+the condition only applies to whether or not we execute the statement.
+In otherwords the following is an infinite loop:
+
+  i:=1
+  if i<=10 then {
+    display i 
+    i:=i+1
+  }
+
+4. Input & Output
+===================================
+Input is accomplished by two operations "read" and "prompt". Read will
+read in a line and convert it to an appropriate type. The types it 
+tries in order are:
+  Real
+  Integer
+  String
+
+So for example if we had the following:
+  read x
+This would read a line of input into x, and it would translate it 
+into the best matching type.
+
+We can also prompt the user for input:
+  prompt "x=" x
+The "prompt" keyword is followed by two expressions, it displays the
+first expression and then assigns to the second one. The second
+expression must either be an id or a valid reference of some kind.
+
+5. Data Types
+===================================
+There are four fundamental data types:
+  1. Integer
+  2. Real
+  3. Array
+  4. String
+
+Type Rules
+----------
+1. Arithmetic may only be performed between integer and real values.
+   When performing arithmetic or comparison, the typical type widening
+   coercion will occur. 
+   
+2. Comparison between strings is possible, and when comparing strings 
+   to numbers the numbers are coerced into strings prior to comparison.
+
+3. Arrays and Strings may both be indexed and used with the "#" operator.
+
+In addition to these fundamental types, there are object types. Objects
+cannot be used in any expressions other than object access expressions.
+
+6. Functions
+===================================
+A function is a named loop with parameters. Functions fully support recursion,
+and all values are passed by value with the following exceptions:
+  1. Arrays are passed by reference.
+  2. Strings are passed by reference.
+  3. Objects are passed by reference.
+
+Consider the following program which solves the tower of Hanoi:
+
+{
+  function solve(n, src, dest, spare) {
+    if n = 1 then {
+      display src
+      display "->"
+      display dest
+      display "\n"
+      stop
+    }
+
+    if n > 1 then {
+      solve(n-1, src, spare, dest)
+      solve(1, src, dest, spare)
+      solve(n-1, spare, dest, src)
+      stop
+    }
+
+    stop
+  }
+
+  prompt "How many discs? " n
+  solve(n, "A", "C", "B")
+}
+
+The above illustrates function definition and invocation.
+
+7. Objects & Classes
+===================================
+Objects are entities which encapsulate state and behavior.
+Member variables of objects are declared using a | | syntax,
+and all members of all objects are public. See the following example
+for rules of syntax:
+{
+  point: [
+    |x y|
+    constructor(x, y) {
+      my:x := x
+      my:y := y
+      stop
+    }
+    
+    function midpoint(p) {
+      mx := (x + p:x)/2
+      my := (y + p:y)/2
+
+      new point(mx, my)
+      stop
+    }
+  ]
+
+  input "x1="; x1
+  input "y1="; y1
+  input "x2="; x2
+  input "y2="; y2
+
+  p1 := new point(x1, y1)
+  p2 := new point(x2, y2)
+
+  mp := p1:midpoint(p2)
+
+  display "Midpoint: "
+  display p2:x
+  display ", "
+  display p2:y
+  display "\n"
+}
+
+Note the self referential "my" keyword along with the ":" for member
+access. Also note how [ ] surrounds a class definition. Classes may
+be redefined without having an impact on existing objects.
